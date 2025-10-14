@@ -185,8 +185,8 @@ def main():
     root = tk.Tk()
     root.title("8 quân xe")
     all_solutions = CreateTarget()
-    target_solution = all_solutions[random.randint(1, 100)]
-    # target_solution =  [4, 5, 0, 6, 3, 1, 2, 7]
+    # target_solution = all_solutions[random.randint(1, 100)]
+    target_solution =  [4, 5, 0, 6, 3, 1, 2, 7]
     globals.target_solution = target_solution
     print("target: ", target_solution)
 

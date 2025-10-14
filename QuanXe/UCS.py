@@ -1,13 +1,7 @@
 from queue import PriorityQueue
 import globals
 def Path_Cost(stateNow):
-    hx = 0
-    for i in range(len(globals.target_solution)):
-        if i > len(stateNow) - 1:
-            hx += globals.target_solution[i]
-        else:
-            hx += abs(stateNow[i] - globals.target_solution[i])
-    return hx
+    return globals.N - len(stateNow)
 def UCS():
     hangdoi = PriorityQueue()
     hangdoi.put((Path_Cost([]), []))  # (cost, state)
