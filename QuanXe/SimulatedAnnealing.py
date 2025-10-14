@@ -1,10 +1,7 @@
 import math
 import random
-
 from Tools.demo.sortvisu import steps
-
 import globals
-
 def Path_Cost_HillClimbing(stateNow):
     hx = 0
     for i in range(len(globals.target_solution)):

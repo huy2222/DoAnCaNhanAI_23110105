@@ -1,8 +1,6 @@
 from Tools.demo.sortvisu import steps
 
 import globals
-
-
 def DLS(limit):
     stack = [[]]
     step = 0

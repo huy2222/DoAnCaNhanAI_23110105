@@ -2,7 +2,6 @@ from queue import PriorityQueue
 
 import globals
 def Path_Cost_ASao(stateNow):
-    # hx = globals.N - len(stateNow)
     hx = 0
     for i in range(len(globals.target_solution)):
         if i > len(stateNow) - 1:
@@ -10,7 +9,6 @@ def Path_Cost_ASao(stateNow):
         else:
             hx += abs(stateNow[i] - globals.target_solution[i])
     gx = len(stateNow)
-    # gx = sum(stateNow)
     return hx + gx
 def ASao():
     hangdoi = PriorityQueue()

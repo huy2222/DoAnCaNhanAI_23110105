@@ -39,7 +39,6 @@ def NiemTinMotPhan(statePos):
         step += 1
         if len(st) == globals.N and check_rooks(st):
             return st, all_state, step
-
         # sinh 2 trạng thái mới từ st
         moved = MoveNiemTinMotPhan(st, statePos)
         added = DatNiemTinMotPhan(st)

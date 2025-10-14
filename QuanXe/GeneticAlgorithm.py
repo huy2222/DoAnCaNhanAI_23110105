@@ -8,8 +8,6 @@ def Fitness(individual):
         else:
             hx += abs(individual[i] - globals.target_solution[i])
     return hx
-
-
 def GeneticAlgorithm(Fitness_fn, gene_pool, target_solution, generations, size_population):
     best = ()
     all_state = []

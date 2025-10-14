@@ -17,7 +17,6 @@ def MoveNiemTin(state):
         new_state.append([row, new_col])
     return new_state
 
-
 def DatNiemTin(state):
     """Thêm 1 quân xe mới vào cột kế tiếp"""
     col = len(state)
@@ -27,11 +26,9 @@ def DatNiemTin(state):
             return new_state
     return state  # nếu không đặt được thì trả lại
 
-
 def Niemtin():
     # ban đầu 1 nghiệm gồm 2 trạng thái: [] và [[0,1]]
     stack = [[[], [[0, 1]]]]
-    result = []
     step = 0
     all_state = []
     while stack:
@@ -40,10 +37,6 @@ def Niemtin():
         step+=1
         for st in state_group:
             if len(st) == globals.N and check_rooks(st):
-                # if len(result) == 10:
-                #     return result  # tìm được nghiệm đủ N quân hợp lệ
-                # else:
-                #     result.append(st)
                 return st, all_state, step
             # sinh 2 trạng thái mới từ st
             moved = MoveNiemTin(st)

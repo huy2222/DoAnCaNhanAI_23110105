@@ -2,7 +2,7 @@ from collections import deque
 import copy
 
 def constraint(i, x, j, y):
-    return x != y  # Chỉ cần khác cột
+    return x != y  
 def revise(domains, Xi, Xj):
     revised = False
     for x in domains[Xi][:]:
@@ -23,7 +23,6 @@ def ac3(domains, variables):
     return True
 
 def is_consistent(state, row, val):
-    """Kiểm tra xem đặt quân hậu ở (row, val) có hợp lệ với các hàng trước không"""
     for r, c in enumerate(state):
         if not constraint(r, c, row, val):
             return False

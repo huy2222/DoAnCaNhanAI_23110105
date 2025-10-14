@@ -6,8 +6,6 @@ from inspect import stack
 from queue import PriorityQueue
 import random
 from turtledemo.penrose import start
-
-
 import globals
 from ASao import ASao
 from AndOrTree import and_or_tree
@@ -26,15 +24,12 @@ from SimulatedAnnealing import SimulatedAnnealing
 from UCS import UCS
 from IDS import IDS
 from AC3 import backtrackAC3
+from tkinter import messagebox
 
 N = 8
 CELL = 50
 global target_solution
-chiphi = 0
-allchiphi = []
-
-
-def BFS_XE():
+def CreateTarget():
     solution = []
     hangdoi = deque([[]])
     while hangdoi:
@@ -49,7 +44,7 @@ def BFS_XE():
                 hangdoi.append(new_state)
     return solution
 
-def draw_board(canvas, queens=None):
+def draw_board(canvas, queens=[]):
     canvas.delete("all")
     colors = ["white", "gray"]
     # Vẽ bàn cờ trước
@@ -61,8 +56,6 @@ def draw_board(canvas, queens=None):
             y2 = y1 + CELL
             color = colors[(row + col) % 2]
             canvas.create_rectangle(x1, y1, x2, y2, fill=color, outline="black")
-
-    # Nếu có quân xe thì vẽ chậm từng con một
     if queens:
         def draw_one(i=0):
             if i < len(queens):
@@ -70,11 +63,10 @@ def draw_board(canvas, queens=None):
                 x = col * CELL + CELL // 2
                 y = row * CELL + CELL // 2
                 canvas.create_text(x, y, text="♖", font=("Arial", 28), fill="red")
-                # sau 300ms thì vẽ con tiếp theo
                 canvas.after(300, draw_one, i + 1)
-
         draw_one(0)
-
+    if queens == None:
+        messagebox.showwarning("Cảnh báo", "Không tìm ra lời giải!")
 
 def random_target():
     global target_solution
@@ -93,10 +85,6 @@ def DrawPerformance(name, step, time, all_state):
     for state in all_state[-10:]:
         txt_log_left.insert("end", f"{state}\n")
 def PerformanceMeasurement(algorithm, *args):
-    # start_time = time.time()
-    # state_result, all_state, step = algorithm(*args)
-    # end_time = time.time()
-    # elapsed = end_time - start_time
     start_time = time.perf_counter()
     state_result, all_state, step = algorithm(*args)
     end_time = time.perf_counter()
@@ -124,17 +112,15 @@ def run_dls():
         draw_board(bantrai, queens=state_result)
         txt_log_left.insert("end", f"LIMIT = {limit}\n")
     DrawPerformance("DLS", step, elapsed, all_state)
-
-# chưa làm IDS
 def run_ids():
     state_result, all_state, step, elapsed = PerformanceMeasurement(IDS)
     draw_board(bantrai, queens=state_result)
     DrawPerformance("IDS", step, elapsed, all_state)
+
 def run_greedy():
     state_result, all_state, step, elapsed = PerformanceMeasurement(Greedy)
     draw_board(bantrai, queens=state_result)
     DrawPerformance("Greedy", step, elapsed, all_state)
-
 def run_asao():
     state_result, all_state, step, elapsed = PerformanceMeasurement(ASao)
     draw_board(bantrai, queens=state_result)
@@ -145,22 +131,14 @@ def run_hillClimbing():
     state_result, all_state, step, elapsed = PerformanceMeasurement(HillClimbing)
     draw_board(bantrai, queens=state_result)
     DrawPerformance("Hill Climbing", step, elapsed, all_state)
-    # print(HillClimbing())
-
-
 def run_geneticAlgorithm():
-    state_result, all_state, step, elapsed = PerformanceMeasurement(GeneticAlgorithm,Fitness, BFS_XE()[:20], target_solution, 3000, 15)
+    state_result, all_state, step, elapsed = PerformanceMeasurement(GeneticAlgorithm,Fitness, all_solutions[:20], target_solution, 3000, 15)
     draw_board(bantrai, queens=state_result)
     DrawPerformance("GeneticAlgorithm", step, elapsed, all_state)
-    # draw_board(bantrai, queens=GeneticAlgorithm())
-
-
 def run_simulatedAnnealing():
     state_result, all_state, step, elapsed = PerformanceMeasurement(SimulatedAnnealing)
     draw_board(bantrai, queens=state_result)
     DrawPerformance("Simulated Annealing", step, elapsed, all_state)
-#
-
 def run_Beam():
     state_result, all_state, step, elapsed = PerformanceMeasurement(BeamSearch, 5)
     draw_board(bantrai, queens=state_result)
@@ -169,27 +147,19 @@ def run_Beam():
 
 def run_AND_OR():
     state_result, all_state, step, elapsed = PerformanceMeasurement(and_or_tree, [])
-    # print("and: ", state_result)
     draw_board(bantrai, queens=state_result)
     DrawPerformance("And Or Tree", step, elapsed, all_state)
-
-
 def run_niemtin():
     state_result, all_state, step, elapsed = PerformanceMeasurement(Niemtin)
     DrawPerformance("Belief State Search", step, elapsed, all_state)
-    # state = Niemtin()
-    # state = random.choice(state)
     sorted_state = sorted(state_result, key=lambda x: x[1])
     rows = [row for row, col in sorted_state]
     draw_board(bantrai, queens=rows)
-
-
 def run_niemtinmotphan():
     state_result, all_state, step, elapsed = PerformanceMeasurement(NiemTinMotPhan, [[0, 0],[1, 7]])
     DrawPerformance("Partial Observation", step, elapsed, all_state)
     sorted_state = sorted(state_result, key=lambda x: x[1])
     rows = [row for row, col in sorted_state]
-    # print("1phan: ", rows)
     draw_board(bantrai, queens=rows)
 
 
@@ -199,7 +169,6 @@ def run_backtracking():
     sorted_state = sorted(state_result, key=lambda x: x[1])
     rows = [row for row, col in sorted_state]
     draw_board(bantrai, queens=rows)
-
 def run_forwardChecking():
     state_result, all_state, step, elapsed = PerformanceMeasurement(ForwardChecking, [])
     DrawPerformance("Fun Backtracking", step, elapsed, all_state)
@@ -215,9 +184,9 @@ def main():
     global txt_name, txt_step, txt_time
     root = tk.Tk()
     root.title("8 quân xe")
-    all_solutions = BFS_XE()
-    # target_solution = all_solutions[random.randint(1, 100)]
-    target_solution =  [4, 5, 0, 6, 3, 1, 2, 7]
+    all_solutions = CreateTarget()
+    target_solution = all_solutions[random.randint(1, 100)]
+    # target_solution =  [4, 5, 0, 6, 3, 1, 2, 7]
     globals.target_solution = target_solution
     print("target: ", target_solution)
 
@@ -228,11 +197,11 @@ def main():
     # Bàn cờ bên trái + log
     left_frame = tk.Frame(board_frame, bg="#f0f8ff")
     left_frame.grid(row=0, column=0, padx=10, pady=10, sticky="n")
-
+    # ban co trai
     bantrai = tk.Canvas(left_frame, width=N * CELL, height=N * CELL, bg="white")
     bantrai.pack()
     draw_board(bantrai)
-
+    # log trai
     log_frame_left = tk.Frame(left_frame)  # frame chứa Text + Scrollbar
     log_frame_left.pack(pady=5, fill="both", expand=True)
 
@@ -241,7 +210,6 @@ def main():
     scroll_left = tk.Scrollbar(log_frame_left, command=txt_log_left.yview)
     scroll_left.pack(side="right", fill="y")
     txt_log_left.config(yscrollcommand=scroll_left.set)
-
     txt_log_left.insert("end", "Log bàn cờ trái...\n")
 
 
@@ -249,11 +217,11 @@ def main():
     # Bàn cờ bên phải + log
     right_frame = tk.Frame(board_frame, bg="#f0f8ff")
     right_frame.grid(row=0, column=1, padx=10, pady=10, sticky="n")
-
+    # bai co phai
     banphai = tk.Canvas(right_frame, width=N * CELL, height=N * CELL, bg="white")
     banphai.pack()
     draw_board(banphai, queens=target_solution)
-
+    # log trai
     log_frame_right = tk.Frame(right_frame)  # frame chứa Text + Scrollbar
     log_frame_right.pack(pady=5, fill="both", expand=True)
 
@@ -363,10 +331,7 @@ def main():
     btn_forwardChecking.pack(fill="x", pady=5)
     btn_Ac3 = tk.Button(search_frame_5, text="AC3", command=run_ac3, bg="#9C27B0", **btn_style)
     btn_Ac3.pack(fill="x", pady=5)
-
     root.mainloop()
-
-
 
 if __name__ == "__main__":
     main()

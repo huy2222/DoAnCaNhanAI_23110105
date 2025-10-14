@@ -2,7 +2,6 @@ import globals
 from NiemTin import check_rooks
 
 def ForwardChecking(state, all_state=None, step = 0):
-    # all_state.append(state)
     if all_state is None:
         all_state = []
     if len(state) == globals.N:

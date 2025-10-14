@@ -7,8 +7,6 @@ def Path_Cost_HillClimbing(stateNow):
         else:
             hx += abs(stateNow[i] - globals.target_solution[i])
     return hx
-
-
 def HillClimbing():
     state = []
     cost = Path_Cost_HillClimbing(state)
